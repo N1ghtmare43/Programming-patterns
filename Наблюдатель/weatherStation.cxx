@@ -2,12 +2,10 @@
 #include <vector>
 
 #pragma region Interfaces
-
-
 class Observer
 {
 public:
-    virtual void update(float temperature) = 0;
+    virtual void update() = 0;
 };
 
 
@@ -43,7 +41,7 @@ public:
     {
         for (auto observer : observers)
         {
-            observer->update(temperature);
+            observer->update();
         }
     }
 
@@ -51,6 +49,11 @@ public:
     {
         temperature = value;
         notifyObservers();
+    }
+
+    float getTemperature()
+    {
+        return temperature;
     }
 
 private:
@@ -64,7 +67,7 @@ private:
 class Device1 : public Observer
 {
 private:
-    Subject* weatherStation;
+    WeatherStation* weatherStation;
     float temperature;
 
     void display()
@@ -77,9 +80,9 @@ public:
         weatherStation(station)
     {}
 
-    void update(float newTemparature)
+    void update() override
     {
-        temperature = newTemparature;
+        temperature = weatherStation->getTemperature();
         display();
     }
 };
@@ -88,7 +91,7 @@ public:
 class Device2 : public Observer
 {
 private:
-    Subject* weatherStation;
+    WeatherStation* weatherStation;
     float temperature;
 
     void display()
@@ -102,9 +105,9 @@ public:
     {}
 
 
-    void update(float newTemparature)
+    void update()
     {
-        temperature = newTemparature;
+        temperature = weatherStation->getTemperature();
         display();
     }
 };
@@ -113,21 +116,23 @@ public:
 #pragma region Main
 int main()
 {
-    WeatherStation station(30.2);
+    WeatherStation* station = new WeatherStation(10.1);
     
-    Device1 d1(&station);
-    Device2 d2(&station);
+    Device1* d1 = new Device1(station);
+    Device2* d2 = new Device2(station);
 
-    station.setTemperature(40);
+    station->setTemperature(40);
 
-    station.registerObserver(&d1);
-    station.registerObserver(&d2);
+    station->registerObserver(d1);
+    station->registerObserver(d2);
 
-    station.setTemperature(90.5);
+    station->setTemperature(90.5);
 
-    station.removeObserver(&d1);
+    station->removeObserver(d1);
 
-    station.setTemperature(0.45);
+    station->setTemperature(0.45);
+
+    delete station, d1, d2;
 
     return 0;
 }
