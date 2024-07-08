@@ -17,7 +17,7 @@ public:
 class FlyWithWings: public FlyBehavior
 {
 public:
-    void fly() 
+    void fly() override
     {
         std::cout << "I`m flying with wings!" << std::endl;
     }
@@ -26,7 +26,7 @@ public:
 class FlyNoWay: public FlyBehavior
 {
 public:
-    void fly() 
+    void fly() override
     {
         std::cout << "I can`t fly!" << std::endl;
     }
@@ -36,7 +36,7 @@ public:
 class Quack: public QuackBehavior
 {
 public:
-    void quack()
+    void quack() override
     {
         std::cout << "Quack!" << std::endl;    
     }
@@ -45,7 +45,7 @@ public:
 class MuteQuack: public QuackBehavior
 {
 public:
-    void quack()
+    void quack() override
     {
         std::cout << "Silence..." << std::endl;
     }
@@ -117,7 +117,7 @@ public:
     {}
 };
 
-
+#pragma region Main
 int main()
 {
     BrownDuck brownDuck;
