@@ -2,22 +2,45 @@
 #include <vector>
 
 #pragma region Interfaces
+
+/* 
+==========================================================================================
+    Определим интересующие нас интерфейсы
+*/
+
+//  Интерфейс наблюдатель
 class Observer
 {
 public:
-    virtual void update() = 0;
+    virtual void update() = 0;                              //  обновление наблюдателя (прием сигнала)
+    /*
+        Необходимые данные можно передавать и в саму функцию update, но это менее гибкий вариант,
+        который, однако, позволяет не хранить ссылку на сам Субъект.
+    */
 };
 
 
+//  Интерфейс субъекта наблюдения
 class Subject
 {
 public:
-    virtual void registerObserver(Observer* observer) = 0;
-    virtual void removeObserver(Observer* observer) = 0;
-    virtual void notifyObservers() = 0;
+    virtual void registerObserver(Observer* observer) = 0;  //  регистрация наблюдателей
+    virtual void removeObserver(Observer* observer) = 0;    //  удаление наблюдателей
+    virtual void notifyObservers() = 0;                     //  оповещение наблюдателей
+                                                            //  =0 обозначает чисто виртуальную функцию,
+                                                            //  т.е. от класса, содержащего такую функцию,
+                                                            //  невозможно создать объект  
 };
 
 #pragma region WeatherStation
+
+/*
+==========================================================================================
+    Определим конкретные классы, реализующие ранее описанные интерфейсы
+*/
+
+
+//  Класс, реализующий интерфейс Субъект
 class WeatherStation: public Subject
 {
 public:
@@ -64,10 +87,12 @@ private:
 };
 
 #pragma region Devices
+
+//  Классы, реализующие интерфейс Наблюдатель
 class Device1 : public Observer
 {
 private:
-    WeatherStation* weatherStation;
+    WeatherStation* weatherStation; //  храним ссылку на субъект для доступа к его данным
     float temperature;
 
     void display()
@@ -81,7 +106,8 @@ public:
     {}
 
     void update() override
-    {
+    {   
+        //  принимаем сигнал о наличии изменений и обрабатываем необходимые нам данные
         temperature = weatherStation->getTemperature();
         display();
     }
@@ -114,6 +140,11 @@ public:
 
 
 #pragma region Main
+
+/*
+===========================================================================================================
+*/
+
 int main()
 {
     WeatherStation* station = new WeatherStation(10.1);

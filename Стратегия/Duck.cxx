@@ -1,6 +1,11 @@
 #include <iostream>
 
 #pragma region Behaviors
+
+/*
+    Определим интефейсы поведения (в данном случае это поведение полета и кряканья)
+*/
+
 class FlyBehavior
 {
 public:
@@ -13,6 +18,7 @@ public:
     virtual void quack() {}
 };
 
+//  Определим классы реализующие вышеописанные поведения  
 
 class FlyWithWings: public FlyBehavior
 {
@@ -53,6 +59,12 @@ public:
 
 
 #pragma region Ducks
+
+/*
+==================================================================================
+Определим базовый класс, инкасулирующий поведение.
+*/
+
 class Duck
 {
 private:
@@ -99,6 +111,7 @@ public:
     }
 };
 
+//  Определим конкретные классы, использующие определенные поведения
 
 class BrownDuck: public Duck
 {
@@ -124,7 +137,7 @@ int main()
     RubberDuck rubberDuck;
 
     brownDuck.performQuack();
-    brownDuck.setQuackBehavior(new MuteQuack);
+    brownDuck.setQuackBehavior(new MuteQuack);  //  мы можем менять поведение объекта прямо на ходу
     brownDuck.performQuack();
 
     return 0;
